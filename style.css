@@ -1,1 +1,20 @@
+:root{
+    --ink:#e5e7eb; --muted:#9ca3af; --bg:#0b0f1a; --panel:#0e1524; --accent:#22d3ee;
+}
+*{box-sizing:border-box} html,body{height:100%}
 
+body{
+    margin:0; background:radial-gradient(1200px 700px at 50% -10%, #152033 0%, var(--bg) 60%);
+    color:var(--ink); font-family:system-ui, apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+}
+
+.hud{
+    position:sticky; top:0; width:100%; max-width:1024px;
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 14px; background:#0b1220cc; backdrop-filter:blur(8px); border-bottom:1px solid #1f2937;
+}
+.wrap{ width:100%; display:grid; place-items:center; padding:14px }
+#game{ width:min(960px, 96vw); height:auto; display:block; border:1px solid #1f2937; border-radius:8px; background:#000 }
+
+.footer{ color:var(--muted); padding:12px 8px; font-size:12px }
