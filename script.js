@@ -15,6 +15,8 @@ const IMG = {
 };
 
 const CELL = 32;
+const SHEET_OX = 0;
+const SHEET_OY = 0;
 const SCALE = 2.5;
 
 const GRID = {
@@ -30,7 +32,12 @@ const GRID = {
     SPIKE_COL: 3,
 };
 
-const tile = (col, row, size = CELL) => ({ sx: col*size, sy: row*size, w: size, h: size });
+const tile = (col, row, size = CELL) => ({ 
+   sx: SHEET_OX + col*size,
+   sy: SHEET_OY + row*size,
+   w: size,
+   h: size
+});
 
 const SPRITES = {
     running: {
@@ -195,6 +202,10 @@ function render(){
     return;
   }
 
+ const t00 = tile(0, 0, CELL);
+drawSprite(assets.sheet, t00, 60, 60, CELL*3, CELL*3);
+
+
   tileImageXScaled(bg, parallax.bgX);
   tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
 
@@ -222,8 +233,8 @@ function render(){
 }
 
 function tileImageXScaled(img, offsetX){
-  const drawH = CANVAS_H;                          // altura do canvas
-  const drawW = img.width * (drawH / img.height);  // mantém proporção
+  const drawH = CANVAS_H;                          
+  const drawW = img.width * (drawH / img.height);  
   let x = (offsetX % drawW);
   if (x > 0) x -= drawW;
   for (; x < CANVAS_W; x += drawW){
