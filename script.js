@@ -185,40 +185,53 @@ function jump(){
 }
 
 function render(){
-    const { bg, ground, sheet } = assets;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+  const { bg, ground, sheet } = assets;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    if (gameState === State.START){
-        ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        drawImpactCentered("START", CANVAS_W/2, CANVAS_H/2, 72);
-        drawHint("Pressione Espaço ou Toque", CANVAS_H*0.7);
-        return;
+  if (gameState === State.START){
+    ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    drawImpactCentered("START", CANVAS_W/2, CANVAS_H/2, 72);
+    drawHint("Pressione Espaço ou Toque", CANVAS_H*0.7);
+    return;
+  }
+
+  tileImageXScaled(bg, parallax.bgX);
+  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
+
+  if (player.state === "run"){
+    drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
+  } else {
+    drawAnimSeq(sheet, SPRITES.rolling, player.x, player.y, player.w, player.h, player.animTime);
+  }
+
+  for (const ob of spikes){
+    drawSprite(sheet, SPRITES.spike, ob.x, ob.y, ob.w, ob.h);
+  }
+
+  if (gameState === State.OVER){
+    ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    if (overTimer >= SHOW_GAMEOVER_AT){
+      drawImpactCentered("GAME OVER", CANVAS_W/2, CANVAS_H/2 - 40, 64);
     }
-
-    tileImageX(bg, parallax.bgX, 0, CANVAS_H - bg.height);
-    tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
-
-    if (player.state === "run"){
-        drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
-    } else {
-        drawAnimSeq(sheet, SPRITES.rolling, player.x, player.y, player.w, player.h, player.animTime);
+    if (overTimer >= SHOW_RETRY_AT){
+      drawImpactCentered("WANT TO TRY AGAIN", CANVAS_W/2, CANVAS_H/2 + 60, 40);
+      drawHint("(Pressione Espaço ou Toque)", CANVAS_H * 0.85);
     }
+  }
+}
 
-    for (const ob of spikes){
-        drawSprite(sheet, SPRITES.spike, ob.x, ob.y, ob.w, ob.h);
-    }
-
-    if (gameState === State.OVER){
-        ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        if (overTimer >= SHOW_GAMEOVER_AT){
-            drawImpactCentered("GAME OVER", CANVAS_W/2, CANVAS_H/2 - 40, 64);
-        }
-        if (overTimer >= SHOW_RETRY_AT){
-            drawImpactCentered("WANT TO TRY AGAIN", CANVAS_W/2, CANVAS_H/2 + 60, 40);
-            drawHint("(Pressione Espaço ou Toque)", CANVAS_H * 0.85);
-        }
-    }
+function tileImageXScaled(img, offsetX){
+  const drawH = CANVAS_H;                          // altura do canvas
+  const drawW = img.width * (drawH / img.height);  // mantém proporção
+  let x = (offsetX % drawW);
+  if (x > 0) x -= drawW;
+  for (; x < CANVAS_W; x += drawW){
+    ctx.drawImage(
+      img, 0, 0, img.width, img.height,
+      Math.round(x), 0, Math.round(drawW), drawH
+    );
+  }
 }
 
 function setHUDScore(v){
