@@ -11,7 +11,7 @@ const SPIKE_RELATIVE_FACTOR = 1.0;
 const IMG = {
     bg: "img/green hill.jpeg",
     ground: "img/Ground-removebg-preview.png",
-    sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the hedgehog - Sonic.png"
+    sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
 const CELL = 32;
@@ -39,6 +39,12 @@ const SPRITES = {
             tile(GRID.RUN_COL_START + i, GRID.RUN_ROW, CELL)
         )
     },
+    rolling: {
+    fw: CELL, fh: CELL, frames: GRID.ROLL_FRAMES, fps: 16, scale: SCALE,
+    seq: Array.from({length: GRID.ROLL_FRAMES}, (_,i) =>
+      tile(GRID.ROLL_COL_START + i, GRID.ROLL_ROW, CELL)
+    )
+  },
     spike: tile(GRID.SPIKE_COL, GRID.SPIKE_ROW, CELL),
 };
 
@@ -56,7 +62,7 @@ const SHOW_GAMEOVER_AT = 2;
 const SHOW_RETRY_AT = 4;
 
 const player = {
-    x: 140, y: GROUND_Y - CELL*SCALE, W: CELL*SCALE, h: CELL*SCALE,
+    x: 140, y: GROUND_Y - CELL*SCALE, w: CELL*SCALE, h: CELL*SCALE,
     vy: 0, onGround: true, animTime: 0, state: "run"
 };
 
@@ -102,13 +108,13 @@ function startGame(){
     running = true; over = false; score = 0; overTimer = 0;
     spikes.length = 0; spawnTimer = 0;
 
-    player.W = SPRITES.running.fw * (SPRITES.running.scale||1);
+    player.w = SPRITES.running.fw * (SPRITES.running.scale||1);
     player.h = SPRITES.running.fh * (SPRITES.running.scale||1);
     player.x = 140;
     player.y = GROUND_Y - player.h;
     player.vy=0; player.onGround=true; player.state="run"; player.animTime=0;
 
-    setHUScore(0);
+    setHUDScore(0);
 }
 function gameOver(){
     if (gameState !== State.PLAY) return;
@@ -142,23 +148,26 @@ function update(dt){
         if (foot >= GROUND_Y){
             player.y = GROUND_Y - player.h;
             player.vy = 0;
+            if ("player.onGround){
+                player.onGround = true;
+                player.state = "run";
+                player.animTime = 0;
+            }
         }
-    }
-
     spawnTimer += dt;
     if (spawnTimer >= SPAWN_EVERY){
         spawnTimer = 0;
         const s= SPRITES.spike;
         const ratio = (player.h / s.h) * SPIKE_RELATIVE_FACTOR;
         const w = s.w * ratio, h = s.h *ratio;
-        spikes.push({ X: CANVAS_W + 24, y: GROUND_Y - h + 4, w, h});
+        spikes.push({ x: CANVAS_W + 24, y: GROUND_Y - h + 4, w, h});
     }
 
     for(let i=spikes.length-1;i>=0;i--){
         const ob = spikes[i];
         ob.x -= worldSpeed * dt;
         if (ob.x + ob.w < -50) spikes.splice(i,1);
-        else if (hit(player, ob)) gamerOver();
+        else if (hit(player, ob)) gameOver();
     }
 
     score += worldSpeed * dt *0.05;
@@ -179,4 +188,83 @@ function render(){
     const { bg, ground, sheet } = assets;
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    if (gameState === State.START){}
+    if (gameState === State.START){
+        ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        drawImpactCentered("START", CANVAS_W/2, CANVAS_H/2, 72);
+        drawHint("Pressione Espaço ou Toque", CANVAS_H*0.7);
+        return;
+    }
+
+    tileImageX(bg, parallax.bgX, 0, CANVAS_H - bg.height);
+    tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
+
+    if (player.state === "run"){
+        drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
+    } else {
+        drawAnimSeq(sheet, SPRITES.rolling, player.x, player.y, player.w, player.h, player.animTime);
+    }
+
+    for (const ob of spikes){
+        drawSprite(sheet, SPRITES.spike, ob.x, ob.y, ob.w, ob.h);
+    }
+
+    if (gameState === State.OVER){
+        ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        if (overTimer >= SHOW_GAMEOVER_AT){
+            drawImpactCentered("GAME OVER", CANVAS_W/2, CANVAS_H/2 - 40, 64);
+        }
+        if (overTimer >= SHOW_RETRY_AT){
+            drawImpactCentered("WANT TO TRY AGAIN", CANVAS_W/2, CANVAS_H/2 + 60, 40);
+            drawHint("(Pressione Espaço ou Toque)", CANVAS_H * 0.85);
+        }
+    }
+}
+
+function setHUDScore(v){
+    const el = document.getElementById("score");
+    if (el) el.textContent = String(v).padStart(5, "0");
+}
+
+function tileImageX(img, offsetX, x0, y){
+    let x = (offsetX % img.width);
+    if (x > 0) x -= img.width;
+    for (; x < CANVAS_W; x += img.width){
+        ctx.drawImage(img, x0 + x, y);
+    }
+}
+function drawSprite(img, s, dx, dy, dw, dh){
+    const w = dw ?? s.w, h = dh ?? s.h;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, s.sx, s.sy, s.w, s.h, Math.round(dx), Math.round(dy), Math.round(w), Math.round(h))
+}
+function drawAnimSeq(img, seqObj, dx, dy, dw, dh, t){
+    const { seq, fps, fw, fh, scale=1 } = seqObj;
+    const idx = Math.floor((t * fps)) % seq.length;
+    const f = seq[idx];
+    const w = dw ?? fw*scale, h = dh ?? fh*scale;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, f.sx, f.sy, f.w, f.h, Math.round(dx), Math.round(dy), Math.round(w), Math.round(h));
+}
+function hit(a,b){
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function drawImpactCentered(text, cx, cy, fontSizePx=64){
+    ctx.save();
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `bold ${fontSizePx}px Impact, Haettenschweiler, 'Arial Black', sans-serif`;
+    ctx.lineWidth = Math.ceil(fontSizePx/16);
+    ctx.strokeStyle = "#000";
+    ctx.strokeText(text, cx, cy);
+    ctx.fillText(text, cx, cy);
+    ctx.restore();
+}
+function drawHint(msg, y){
+    ctx.fillStyle="#9ca3af";
+    ctx.font="14px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.textAlign = "center"; ctx.textBaseline="middle";
+    ctx.fillText(msg, CANVAS_W/2, y);
+}
