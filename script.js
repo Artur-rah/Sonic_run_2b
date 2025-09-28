@@ -148,7 +148,7 @@ function update(dt){
         if (foot >= GROUND_Y){
             player.y = GROUND_Y - player.h;
             player.vy = 0;
-            if ("!player.onGround){
+            if (!player.onGround){
                 player.onGround = true;
                 player.state = "run";
                 player.animTime = 0;
