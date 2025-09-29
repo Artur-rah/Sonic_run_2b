@@ -319,19 +319,26 @@ let DEBUG_PAUSED = false;
 
 let DEBUG_SHOW_GRID = true;
 window.addEventListener("keydown", (e) => {
-  if (e.key === "[") { SHEET_OX -= 32; }
-  if (e.key === "]") { SHEET_OX += 32; }
-  if (e.key === ";") { SHEET_OY += 32; }
-  if (e.key === "'") { SHEET_OY -= 32; }
-  if (e.key === "-") { CELL = Math.max(8, CELL - 1); }
-  if (e.key === "=") { CELL = Math.min(128, CELL + 1); }
-  if (e.key.toLowerCase() === "g") { DEBUG_SHOW_GRID = !DEBUG_SHOW_GRID; }
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","-","=","+"].includes(k)) e.preventDefault();
+
+  // OX
+  if (k === "a" || k === "A" || k === "ArrowLeft")  { SHEET_OX -= 32; changed = true; }
+  if (k === "d" || k === "D" || k === "ArrowRight") { SHEET_OX += 32; changed = true; }
+
+  // OY
+  if (k === "w" || k === "W" || k === "ArrowUp")    { SHEET_OY -= 32; changed = true; }
+  if (k === "s" || k === "S" || k === "ArrowDown")   { SHEET_OY += 32; changed = true; }
+
+  // CELL
+  if (k === "-" || k === "Subtract") { CELL = Math.max(8, CELL - 1); changed = true; }
+  if (k === "=" || k === "Add" || k === "+") { CELL = Math.min(128, CELL + 1); changed = true; }
+
+  if (changed) console.log(`SHEET_OX=${SHEET_OX}, SHEET_OY=${SHEET_OY}, CELL=${CELL}`);
 });
 
 window.addEventListener("keydown", (e) => {
   if (e.key.toLowerCase() === "p") {
     if (gameState === State.PLAY) {
-      // alterna apenas a simulação; continua renderizando
       running = !running;
       DEBUG_PAUSED = !running;
     }
