@@ -40,7 +40,7 @@ const SPRITES = {
     ]
   },
   
-  spike: { sx: 40, sy: 123, w: CELL, h: CELL }
+  spike: { sx: 0, sy: 80, w: CELL, h: CELL }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
