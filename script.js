@@ -14,9 +14,9 @@ const IMG = {
     sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
-const CELL = 32;
-const SHEET_OX = 224;
-const SHEET_OY = 32;
+let CELL = 32;
+let SHEET_OX = 224;
+let SHEET_OY = 32;
 const SCALE = 2.5;
 
 const GRID = {
@@ -300,3 +300,14 @@ function drawHint(msg, y){
     ctx.textAlign = "center"; ctx.textBaseline="middle";
     ctx.fillText(msg, CANVAS_W/2, y);
 }
+
+let DEBUG_SHOW_GRID = true;
+window.addEventListener("keydown", (e) => {
+  if (e.key === "[") { SHEET_OX -= 32; }
+  if (e.key === "]") { SHEET_OX += 32; }
+  if (e.key === ";") { SHEET_OY += 32; }
+  if (e.key === "'") { SHEET_OY -= 32; }
+  if (e.key === "-") { CELL = Math.max(8, CELL - 1); }
+  if (e.key === "=") { CELL = Math.min(128, CELL + 1); }
+  if (e.key.toLowerCase() === "g") { DEBUG_SHOW_GRID = !DEBUG_SHOW_GRID; }
+});
