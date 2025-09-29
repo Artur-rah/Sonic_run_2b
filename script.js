@@ -14,47 +14,39 @@ const IMG = {
   sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
+// Tamanho de cada tile do sprite
 const CELL = 32;
-const SHEET_OX = 0;
-const SHEET_OY = 0;
 const SCALE = 2.5;
 
-const GRID = {
-  RUN_ROW: 0,
-  RUN_COL_START: 0,
-  RUN_FRAMES: 3,
-
-  ROLL_ROW: 1,
-  ROLL_COL_START: 0,
-  ROLL_FRAMES: 8,
-
-  SPIKE_ROW: 0,
-  SPIKE_COL: 3,
-};
-
-// ✅ Só UMA função tile (com offsets)
-const tile = (col, row, size = CELL) => ({
-  sx: SHEET_OX + col * size,
-  sy: SHEET_OY + row * size,
-  w: size,
-  h: size
-});
-
+// ---------- SPRITES COM OFFSETS MANUAIS ----------
 const SPRITES = {
   running: {
-    fw: CELL, fh: CELL, frames: GRID.RUN_FRAMES, fps: 14, scale: SCALE,
-    seq: Array.from({ length: GRID.RUN_FRAMES }, (_, i) =>
-      tile(GRID.RUN_COL_START + i, GRID.RUN_ROW, CELL)
-    )
+    fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
+    // running começa em x=32, y=34, com ~2px de espaço entre frames
+    seq: [
+      { sx:  32, sy: 34, w: CELL, h: CELL },
+      { sx:  66, sy: 34, w: CELL, h: CELL },
+      { sx: 100, sy: 34, w: CELL, h: CELL },
+    ]
   },
   rolling: {
-    fw: CELL, fh: CELL, frames: GRID.ROLL_FRAMES, fps: 16, scale: SCALE,
-    seq: Array.from({ length: GRID.ROLL_FRAMES }, (_, i) =>
-      tile(GRID.ROLL_COL_START + i, GRID.ROLL_ROW, CELL)
-    )
+    fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
+    // rolling começa em x=30, y=77, espaço de 4px entre frames
+    seq: [
+      { sx:  30, sy: 77, w: CELL, h: CELL },
+      { sx:  66, sy: 77, w: CELL, h: CELL },
+      { sx: 102, sy: 77, w: CELL, h: CELL },
+      { sx: 138, sy: 77, w: CELL, h: CELL },
+      { sx: 174, sy: 77, w: CELL, h: CELL },
+      { sx: 210, sy: 77, w: CELL, h: CELL },
+      { sx: 246, sy: 77, w: CELL, h: CELL },
+      { sx: 282, sy: 77, w: CELL, h: CELL },
+    ]
   },
-  spike: tile(GRID.SPIKE_COL, GRID.SPIKE_ROW, CELL),
+  
+  spike: { sx: 40, sy: 123, w: CELL, h: CELL }
 };
+
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
 const assets = {};
@@ -162,12 +154,13 @@ function update(dt){
         player.animTime = 0;
       }
     }
+
     spawnTimer += dt;
     if (spawnTimer >= SPAWN_EVERY){
       spawnTimer = 0;
       const s= SPRITES.spike;
       const ratio = (player.h / s.h) * SPIKE_RELATIVE_FACTOR;
-      const w = s.w * ratio, h = s.h *ratio;
+      const w = s.w * ratio, h = s.h * ratio;
       spikes.push({ x: CANVAS_W + 24, y: GROUND_Y - h + 4, w, h});
     }
 
@@ -178,7 +171,7 @@ function update(dt){
       else if (hit(player, ob)) gameOver();
     }
 
-    score += worldSpeed * dt *0.05;
+    score += worldSpeed * dt * 0.05;
   }
 }
 
@@ -203,11 +196,8 @@ function render(){
     return;
   }
 
-  const t00 = tile(0, 0, CELL);
-  drawSprite(assets.sheet, t00, 60, 60, CELL*3, CELL*3);
-
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
+  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2)
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
@@ -220,8 +210,9 @@ function render(){
   }
 
   if (gameState === State.OVER){
-    ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
-
+    ctx.fillStyle = "#000"; ctx.globalAlpha = 0.5;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.globalAlpha = 1;
     if (overTimer >= SHOW_GAMEOVER_AT){
       drawImpactCentered("GAME OVER", CANVAS_W/2, CANVAS_H/2 - 40, 64);
     }
@@ -238,10 +229,7 @@ function tileImageXScaled(img, offsetX){
   let x = (offsetX % drawW);
   if (x > 0) x -= drawW;
   for (; x < CANVAS_W; x += drawW){
-    ctx.drawImage(
-      img, 0, 0, img.width, img.height,
-      Math.round(x), 0, Math.round(drawW), drawH
-    );
+    ctx.drawImage(img, 0, 0, img.width, img.height, Math.round(x), 0, Math.round(drawW), drawH);
   }
 }
 
