@@ -18,7 +18,7 @@ const CELL = 32;
 const SCALE = 2.5;
 
 const SPRITES = {
-  running: {
+  rolling: { // ESTE deve ser o pulo
     fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
     seq: [
       { sx:  32, sy: 34, w: CELL, h: CELL },
@@ -26,7 +26,7 @@ const SPRITES = {
       { sx: 100, sy: 34, w: CELL, h: CELL },
     ]
   },
-  rolling: {
+  running: { // ESTE deve ser a corrida
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
       { sx:  30, sy: 77, w: CELL, h: CELL },
@@ -42,7 +42,6 @@ const SPRITES = {
   
   spike: { sx: 40, sy: 123, w: CELL, h: CELL }
 };
-
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
 const assets = {};
