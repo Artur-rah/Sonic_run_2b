@@ -201,16 +201,6 @@ function render(){
     drawHint("Pressione Espaço ou Toque", CANVAS_H*0.7);
     return;
 
-ctx.save();
-ctx.fillStyle = "rgba(0,0,0,0.6)";
-ctx.fillRect(CANVAS_W-240, 8, 232, 44);
-ctx.fillStyle = "#fff";
-ctx.font = "12px monospace";
-ctx.textAlign = "left";
-ctx.textBaseline = "top";
-ctx.fillText(`SHEET_OX: ${SHEET_OX}   SHEET_OY: ${SHEET_OY}   CELL: ${CELL}`, CANVAS_W-232, 16);
-ctx.fillText("A/D, W/S, ←/→, ↑/↓, -/=", CANVAS_W-232, 30);
-ctx.restore();
 
   }
 
@@ -250,6 +240,17 @@ for (const ob of spikes){
       drawHint("(Pressione Espaço ou Toque)", CANVAS_H * 0.85);
     }
   }
+
+ctx.save();
+ctx.fillStyle = "rgba(0,0,0,0.6)";
+ctx.fillRect(CANVAS_W-240, 8, 232, 44);
+ctx.fillStyle = "#fff";
+ctx.font = "12px monospace";
+ctx.textAlign = "left";
+ctx.textBaseline = "top";
+ctx.fillText(`SHEET_OX: ${SHEET_OX}   SHEET_OY: ${SHEET_OY}   CELL: ${CELL}`, CANVAS_W-232, 16);
+ctx.fillText("A/D, W/S, ←/→, ↑/↓, -/=", CANVAS_W-232, 30);
+ctx.restore();
 }
 
 function tileImageXScaled(img, offsetX){
