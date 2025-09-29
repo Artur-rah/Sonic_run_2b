@@ -15,8 +15,8 @@ const IMG = {
 };
 
 const CELL = 32;
-const SHEET_OX = 128;
-const SHEET_OY = 0;
+const SHEET_OX = 224;
+const SHEET_OY = 32;
 const SCALE = 2.5;
 
 const GRID = {
