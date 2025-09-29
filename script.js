@@ -297,15 +297,19 @@ function hit(a,b){
 
 function drawImpactCentered(text, cx, cy, fontSizePx=64){
     ctx.save();
-    ctx.fillStyle = "#fff";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = `bold ${fontSizePx}px Impact, Haettenschweiler, 'Arial Black', sans-serif`;
-    ctx.lineWidth = Math.ceil(fontSizePx/16);
-    ctx.strokeStyle = "#000";
-    ctx.strokeText(text, cx, cy);
-    ctx.fillText(text, cx, cy);
-    ctx.restore();
+ctx.fillStyle = "rgba(0,0,0,0.6)";
+ctx.fillRect(CANVAS_W - 340, 8, 332, 48);       // caixa mais larga
+ctx.fillStyle = "#fff";
+ctx.font = "12px monospace";
+ctx.textAlign = "left";
+ctx.textBaseline = "top";
+const cellVal = Number.isFinite(Number(CELL)) ? String(Number(CELL)) : String(CELL);
+ctx.fillText(
+  `SHEET_OX: ${SHEET_OX}   SHEET_OY: ${SHEET_OY}   CELL: ${cellVal}`,
+  CANVAS_W - 332, 16
+);
+ctx.fillText("A/D, W/S, ←/→, ↑/↓, -/=", CANVAS_W - 332, 32);
+ctx.restore();
 }
 function drawHint(msg, y){
     ctx.fillStyle="#9ca3af";
