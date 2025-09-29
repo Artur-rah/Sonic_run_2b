@@ -301,6 +301,9 @@ function drawHint(msg, y){
     ctx.fillText(msg, CANVAS_W/2, y);
 }
 
+
+let DEBUG_PAUSED = false; 
+
 let DEBUG_SHOW_GRID = true;
 window.addEventListener("keydown", (e) => {
   if (e.key === "[") { SHEET_OX -= 32; }
@@ -310,4 +313,14 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "-") { CELL = Math.max(8, CELL - 1); }
   if (e.key === "=") { CELL = Math.min(128, CELL + 1); }
   if (e.key.toLowerCase() === "g") { DEBUG_SHOW_GRID = !DEBUG_SHOW_GRID; }
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key.toLowerCase() === "p") {
+    if (gameState === State.PLAY) {
+      // alterna apenas a simulação; continua renderizando
+      running = !running;
+      DEBUG_PAUSED = !running;
+    }
+  }
 });
