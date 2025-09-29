@@ -15,7 +15,7 @@ const IMG = {
 };
 
 const CELL = 32;
-const SHEET_OX = 64;
+const SHEET_OX = 128;
 const SHEET_OY = 0;
 const SCALE = 2.5;
 
@@ -29,7 +29,7 @@ const GRID = {
     ROLL_FRAMES: 8,
 
     SPIKE_ROW: 0,
-    SPIKE_COL: 5,
+    SPIKE_COL: 7,
 };
 
 const tile = (col, row, size = CELL) => ({ 
