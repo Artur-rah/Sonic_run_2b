@@ -202,13 +202,21 @@ function render(){
     return;
   }
 
- const t00 = tile(0, 0, CELL);
-drawSprite(assets.sheet, t00, 60, 60, CELL*3, CELL*3);
-
-
   tileImageXScaled(bg, parallax.bgX);
   tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
 
+  const t00 = tile(0, 0, CELL);
+drawSprite(assets.sheet, t00, 60, 60, CELL*3, CELL*3);
+
+ctx.strokeStyle = "red";
+ctx.lineWidth = 2;
+ctx.strokeRect(Math.round(player.x), Math.round(player.y), Math.round(player.w), Math.round(player.h));
+
+ctx.strokeStyle = "lime";
+for (const ob of spikes){
+  ctx.strokeRect(Math.round(ob.x), Math.round(ob.y), Math.round(ob.w), Math.round(ob.h));
+}
+  
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
   } else {
