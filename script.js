@@ -14,7 +14,7 @@ const IMG = {
   sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
-const CELL = 64;
+const CELL = 32;
 const SCALE = 2.5;
 
 const SPRITES = {
