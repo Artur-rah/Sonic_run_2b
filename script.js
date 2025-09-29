@@ -319,21 +319,35 @@ let DEBUG_PAUSED = false;
 
 let DEBUG_SHOW_GRID = true;
 window.addEventListener("keydown", (e) => {
-  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","-","=","+"].includes(k)) e.preventDefault();
+  const k = e.key;
+  let changed = false;
 
-  // OX
+  // evita scroll/zoom quando usamos setas e +/- 
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","-","=","+"].includes(k)) {
+    e.preventDefault();
+  }
+
+  // Offsets X
   if (k === "a" || k === "A" || k === "ArrowLeft")  { SHEET_OX -= 32; changed = true; }
   if (k === "d" || k === "D" || k === "ArrowRight") { SHEET_OX += 32; changed = true; }
 
-  // OY
+  // Offsets Y
   if (k === "w" || k === "W" || k === "ArrowUp")    { SHEET_OY -= 32; changed = true; }
-  if (k === "s" || k === "S" || k === "ArrowDown")   { SHEET_OY += 32; changed = true; }
+  if (k === "s" || k === "S" || k === "ArrowDown")  { SHEET_OY += 32; changed = true; }
 
-  // CELL
-  if (k === "-" || k === "Subtract") { CELL = Math.max(8, CELL - 1); changed = true; }
-  if (k === "=" || k === "Add" || k === "+") { CELL = Math.min(128, CELL + 1); changed = true; }
+  // Tamanho do tile
+  if (k === "-" || k === "Subtract")                { CELL = Math.max(8, CELL - 1); changed = true; }
+  if (k === "=" || k === "Add" || k === "+")        { CELL = Math.min(128, CELL + 1); changed = true; }
 
-  if (changed) console.log(`SHEET_OX=${SHEET_OX}, SHEET_OY=${SHEET_OY}, CELL=${CELL}`);
+  // Pausa (aproveita o mesmo listener)
+  if (k.toLowerCase() === "p" && gameState === State.PLAY) {
+    running = !running;
+    DEBUG_PAUSED = !running;
+  }
+
+  if (changed) {
+    console.log(`SHEET_OX=${SHEET_OX}, SHEET_OY=${SHEET_OY}, CELL=${CELL}`);
+  }
 });
 
 window.addEventListener("keydown", (e) => {
