@@ -14,15 +14,12 @@ const IMG = {
   sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
-// Tamanho de cada tile do sprite
 const CELL = 32;
 const SCALE = 2.5;
 
-// ---------- SPRITES COM OFFSETS MANUAIS ----------
 const SPRITES = {
   running: {
     fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
-    // running começa em x=32, y=34, com ~2px de espaço entre frames
     seq: [
       { sx:  32, sy: 34, w: CELL, h: CELL },
       { sx:  66, sy: 34, w: CELL, h: CELL },
@@ -31,7 +28,6 @@ const SPRITES = {
   },
   rolling: {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
-    // rolling começa em x=30, y=77, espaço de 4px entre frames
     seq: [
       { sx:  30, sy: 77, w: CELL, h: CELL },
       { sx:  66, sy: 77, w: CELL, h: CELL },
