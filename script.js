@@ -40,19 +40,33 @@ const tile = (col, row, size = CELL) => ({
 });
 
 const SPRITES = {
-    running: {
-        fw: CELL, fh: CELL, frames: GRID.RUN_FRAMES, fps: 14, scale: SCALE,
-        seq: Array.from({length: GRID.RUN_FRAMES}, (_,i) =>
-            tile(GRID.RUN_COL_START + i, GRID.RUN_ROW, CELL)
-        )
-    },
-    rolling: {
-    fw: CELL, fh: CELL, frames: GRID.ROLL_FRAMES, fps: 16, scale: SCALE,
-    seq: Array.from({length: GRID.ROLL_FRAMES}, (_,i) =>
-      tile(GRID.ROLL_COL_START + i, GRID.ROLL_ROW, CELL)
-    )
+      running: {
+    get fw(){ return CELL; },
+    get fh(){ return CELL; },
+    frames: GRID.RUN_FRAMES,
+    fps: 14,
+    scale: SCALE,
+    get seq(){
+      return Array.from({ length: GRID.RUN_FRAMES }, (_, i) =>
+        tile(GRID.RUN_COL_START + i, GRID.RUN_ROW, CELL)
+      );
+    }
   },
-    spike: tile(GRID.SPIKE_COL, GRID.SPIKE_ROW, CELL),
+  rolling: {
+    get fw(){ return CELL; },
+    get fh(){ return CELL; },
+    frames: GRID.ROLL_FRAMES,
+    fps: 16,
+    scale: SCALE,
+    get seq(){
+      return Array.from({ length: GRID.ROLL_FRAMES }, (_, i) =>
+        tile(GRID.ROLL_COL_START + i, GRID.ROLL_ROW, CELL)
+      );
+    }
+  },
+  get spike(){
+    return tile(GRID.SPIKE_COL, GRID.SPIKE_ROW, CELL);
+  }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
@@ -240,7 +254,7 @@ for (const ob of spikes){
     }
   }
 
-ctx.save();
+ ctx.save();
   ctx.fillStyle = "rgba(0,0,0,0.6)";
   ctx.fillRect(CANVAS_W - 340, 8, 332, 48);
   ctx.fillStyle = "#fff";
@@ -252,6 +266,20 @@ ctx.save();
   ctx.fillText("A/D, W/S, ←/→, ↑/↓, -/=", CANVAS_W - 332, 32);
   ctx.restore();
 }
+
+
+ctx.save();
+  ctx.fillStyle = "rgba(0,0,0,0.6)";
+  ctx.fillRect(CANVAS_W - 340, 8, 332, 48);
+  ctx.fillStyle = "#fff";
+  ctx.font = "12px monospace";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  const cellVal = Number.isFinite(Number(CELL)) ? String(Number(CELL)) : String(CELL);
+  ctx.fillText(`SHEET_OX: ${SHEET_OX}   SHEET_OY: ${SHEET_OY}   CELL: ${cellVal}`, CANVAS_W - 332, 16);
+  ctx.fillText("A/D, W/S, ←/→, ↑/↓, -/=", CANVAS_W - 332, 32);
+  ctx.restore();
+
 
 function tileImageXScaled(img, offsetX){
   const drawH = CANVAS_H;                          
@@ -265,6 +293,18 @@ function tileImageXScaled(img, offsetX){
     );
   }
 }
+
+function drawImpactCentered(text, cx, cy, fontSizePx = 64){
+  ctx.save();
+  ctx.fillStyle = "#fff";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = `bold ${fontSizePx}px Impact, Haettenschweiler, 'Arial Black', sans-serif`;
+  ctx.lineWidth = Math.ceil(fontSizePx / 16);
+  ctx.strokeStyle = "#000";
+  ctx.strokeText(text, cx, cy);
+  ctx.fillText(text, cx, cy);
+  ctx.restore();
 
 function setHUDScore(v){
     const el = document.getElementById("score");
