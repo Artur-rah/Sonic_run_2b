@@ -16,6 +16,7 @@ const IMG = {
 
 const CELL = 32;
 const SCALE = 2.5;
+const GROUND_HEIGHT_SCALE = 1.5;
 
 const SPRITES = {
   running: {
@@ -201,7 +202,21 @@ function render(){
   }
 
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
+  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
+const groundDrawY = GROUND_Y;
+const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
+
+let x = (parallax.groundX % groundDrawWidth);
+if (x > 0) x -= groundDrawWidth;
+for (; x < CANVAS_W; x += groundDrawWidth) {
+    ctx.drawImage(
+        ground,
+        Math.round(x),
+        groundDrawY,
+        Math.round(groundDrawWidth),
+        Math.round(groundDrawHeight)
+    );
+}
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
