@@ -136,9 +136,11 @@ function update(dt){
 
   if(running){
     const worldSpeed = SPEED + Math.min(240, score*0.4);
+    const groundDrawWidth = assets.ground.width * GROUND_HEIGHT_SCALE;
 
     parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
-    parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
+    // CORREÇÃO: Sincroniza o cálculo do parallax com o tamanho real do chão desenhado
+    parallax.groundX = (parallax.groundX - worldSpeed*dt) % groundDrawWidth;
 
     player.animTime += dt;
     player.vy += GRAVITY * dt;
@@ -180,15 +182,6 @@ function update(dt){
   }
 }
 
-function jump(){
-  if (!running || over) return;
-  if (player.onGround){
-    player.vy = JUMP_VY
-    player.onGround = false ;
-    player.state = "roll";
-    player.animTime = 0;
-  }
-}
 
 function render(){
   const { bg, ground, sheet } = assets;
@@ -202,21 +195,23 @@ function render(){
   }
 
   tileImageXScaled(bg, parallax.bgX);
-  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
-const groundDrawY = GROUND_Y;
-const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
 
-let x = (parallax.groundX % groundDrawWidth);
-if (x > 0) x -= groundDrawWidth;
-for (; x < CANVAS_W; x += groundDrawWidth) {
-    ctx.drawImage(
-        ground,
-        Math.round(x),
-        groundDrawY,
-        Math.round(groundDrawWidth),
-        Math.round(groundDrawHeight)
-    );
-}
+  // Bloco corrigido para desenhar o chão
+  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
+  const groundDrawY = GROUND_Y;
+  const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
+
+  let x = (parallax.groundX % groundDrawWidth);
+  if (x > 0) x -= groundDrawWidth;
+  for (; x < CANVAS_W; x += groundDrawWidth) {
+      ctx.drawImage(
+          ground,
+          Math.round(x),
+          groundDrawY,
+          Math.round(groundDrawWidth),
+          Math.round(groundDrawHeight)
+      );
+  }
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
