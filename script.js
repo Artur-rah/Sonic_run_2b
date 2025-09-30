@@ -5,6 +5,7 @@ const GRAVITY = 1800;
 const JUMP_VY = -650;
 const SPEED = 360;
 const SPAWN_EVERY = 1.1;
+ const GROUND_VISUAL_OFFSET = 30;
 
 const SPIKE_RELATIVE_FACTOR = 1.0;
 
@@ -200,7 +201,6 @@ function render(){
     return;
   }
 
-  const GROUND_VISUAL_OFFSET = 30;
 
   tileImageXScaled(bg, parallax.bgX);
   tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + GROUND_VISUAL_OFFSET);
