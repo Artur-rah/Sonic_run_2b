@@ -19,20 +19,22 @@ const SCALE = 2.5;
 
 const SPRITES = {
   running: {
-    fw: CELL, fh: CELL, frames: 4, fps: 16, scale: SCALE,
+    fw: CELL, fh: CELL, frames: 4, // CORRIGIDO: Para bater com os 4 frames reais da imagem
+    fps: 16, scale: SCALE,
     seq: [
       { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  64, sy: 0, w: CELL, h: CELL },
-      { sx: 96, sy: 0, w: CELL, h: CELL },
-      { sx: 128, sy: 0, w: CELL, h: CELL}
+      { sx:  96, sy: 0, w: CELL, h: CELL },
+      { sx: 128, sy: 0, w: CELL, h: CELL }
     ]
   },
   rolling: {
-    fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
+    fw: CELL, fh: CELL, frames: 8, // CORRIGIDO: Para bater com os 8 frames reais da imagem
+    fps: 14, scale: SCALE,
     seq: [
       { sx:  32, sy: 34, w: CELL, h: CELL },
       { sx:  64, sy: 34, w: CELL, h: CELL },
-      { sx: 96, sy: 34, w: CELL, h: CELL },
+      { sx:  96, sy: 34, w: CELL, h: CELL },
       { sx: 128, sy: 34, w: CELL, h: CELL },
       { sx: 160, sy: 34, w: CELL, h: CELL },
       { sx: 192, sy: 34, w: CELL, h: CELL },
@@ -40,7 +42,7 @@ const SPRITES = {
       { sx: 256, sy: 34, w: CELL, h: CELL },
     ]
   },
-  // CORREÇÃO 1: Coordenadas corretas do espinho no spritesheet.
+  // Lembre-se: se o espinho não aparecer, ajuste sx e sy para as coordenadas exatas da sua imagem
   spike: { sx: 32, sy: 64, w: 32, h: 32 }
 };
 
@@ -151,11 +153,9 @@ function update(dt){
       }
     }
 
-    // CORREÇÃO 2: Lógica que cria o espinho com um tamanho fixo e correto.
     spawnTimer += dt;
     if (spawnTimer >= SPAWN_EVERY) {
       spawnTimer = 0;
-
       const spikeHeightOnScreen = CELL * SCALE * 0.8;
       const s = SPRITES.spike;
       const spikeWidthOnScreen = s.w * (spikeHeightOnScreen / s.h);
@@ -210,7 +210,7 @@ function render(){
   }
 
   for (const ob of spikes){
-    drawSprite(sheet, SPRITES.spike.seq[0], ob.x, ob.y, ob.w, ob.h);
+    drawSprite(sheet, SPRITES.spike, ob.x, ob.y, ob.w, ob.h);
   }
 
   if (gameState === State.OVER){
