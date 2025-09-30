@@ -210,7 +210,7 @@ function render(){
   }
 
   for (const ob of spikes){
-    drawSprite(sheet, SPRITES.spike, ob.x, ob.y, ob.w, ob.h);
+    drawSprite(sheet, SPRITES.running.seq[0], ob.x, ob.y, ob.w, ob.h);
   }
 
   if (gameState === State.OVER){
