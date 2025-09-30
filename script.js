@@ -22,14 +22,14 @@ const SPRITES = {
   running: {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
-      { sx:  30, sy: 77, w: CELL, h: CELL },
-      { sx:  66, sy: 77, w: CELL, h: CELL },
-      { sx: 102, sy: 77, w: CELL, h: CELL },
-      { sx: 138, sy: 77, w: CELL, h: CELL },
-      { sx: 174, sy: 77, w: CELL, h: CELL },
-      { sx: 210, sy: 77, w: CELL, h: CELL },
-      { sx: 246, sy: 77, w: CELL, h: CELL },
-      { sx: 282, sy: 77, w: CELL, h: CELL },
+      { sx:  30, sy: 0, w: CELL, h: CELL },
+      { sx:  66, sy: 0, w: CELL, h: CELL },
+      { sx: 102, sy: 0, w: CELL, h: CELL },
+      { sx: 138, sy: 0, w: CELL, h: CELL },
+      { sx: 174, sy: 0, w: CELL, h: CELL },
+      { sx: 210, sy: 0, w: CELL, h: CELL },
+      { sx: 246, sy: 0, w: CELL, h: CELL },
+      { sx: 282, sy: 0, w: CELL, h: CELL },
     ]
   },
 
