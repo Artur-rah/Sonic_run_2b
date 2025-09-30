@@ -22,10 +22,10 @@ const SPRITES = {
     fw: CELL, fh: CELL, frames: 4, // CORRIGIDO: Para bater com os 4 frames reais da imagem
     fps: 16, scale: SCALE,
     seq: [
+      { sx:  0, sy: 0, w: CELL, h: CELL },
       { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  64, sy: 0, w: CELL, h: CELL },
-      { sx:  96, sy: 0, w: CELL, h: CELL },
-      { sx: 128, sy: 0, w: CELL, h: CELL }
+      { sx: 96, sy: 0, w: CELL, h: CELL }
     ]
   },
   rolling: {
