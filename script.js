@@ -23,8 +23,8 @@ const SPRITES = {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
       { sx:  32, sy: 0, w: CELL, h: CELL },
-      { sx:  66, sy: 0, w: CELL, h: CELL },
-      { sx: 100, sy: 0, w: CELL, h: CELL },
+      { sx:  64, sy: 0, w: CELL, h: CELL },
+      { sx: 96, sy: 0, w: CELL, h: CELL },
     ]
   },
 
