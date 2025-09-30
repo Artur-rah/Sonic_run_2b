@@ -22,14 +22,9 @@ const SPRITES = {
   running: {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
-      { sx:  30, sy: 0, w: CELL, h: CELL },
+      { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  66, sy: 0, w: CELL, h: CELL },
-      { sx: 102, sy: 0, w: CELL, h: CELL },
-      { sx: 138, sy: 0, w: CELL, h: CELL },
-      { sx: 174, sy: 0, w: CELL, h: CELL },
-      { sx: 210, sy: 0, w: CELL, h: CELL },
-      { sx: 246, sy: 0, w: CELL, h: CELL },
-      { sx: 282, sy: 0, w: CELL, h: CELL },
+      { sx: 100, sy: 0, w: CELL, h: CELL },
     ]
   },
 
@@ -37,9 +32,14 @@ const SPRITES = {
   rolling: {
     fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
     seq: [
-      { sx:  32, sy: 34, w: CELL, h: CELL },
+      { sx:  30, sy: 34, w: CELL, h: CELL },
       { sx:  66, sy: 34, w: CELL, h: CELL },
-      { sx: 100, sy: 34, w: CELL, h: CELL },
+      { sx: 102, sy: 34, w: CELL, h: CELL },
+      { sx: 138, sy: 34, w: CELL, h: CELL },
+      { sx: 174, sy: 34, w: CELL, h: CELL },
+      { sx: 210, sy: 34, w: CELL, h: CELL },
+      { sx: 246, sy: 34, w: CELL, h: CELL },
+      { sx: 282, sy: 34, w: CELL, h: CELL },
     ]
   },
 
