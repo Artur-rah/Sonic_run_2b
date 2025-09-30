@@ -33,19 +33,19 @@ const SPRITES = {
   rolling: {
     fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
     seq: [
-      { sx:  31, sy: 34, w: CELL, h: CELL },
-      { sx:  59, sy: 34, w: CELL, h: CELL },
-      { sx: 89, sy: 34, w: CELL, h: CELL },
-      { sx: 124, sy: 34, w: CELL, h: CELL },
-      { sx: 155, sy: 34, w: CELL, h: CELL },
-      { sx: 186, sy: 34, w: CELL, h: CELL },
-      { sx: 217, sy: 34, w: CELL, h: CELL },
-      { sx: 248, sy: 34, w: CELL, h: CELL },
+      { sx:  32, sy: 34, w: CELL, h: CELL },
+      { sx:  64, sy: 34, w: CELL, h: CELL },
+      { sx: 96, sy: 34, w: CELL, h: CELL },
+      { sx: 128, sy: 34, w: CELL, h: CELL },
+      { sx: 160, sy: 34, w: CELL, h: CELL },
+      { sx: 192, sy: 34, w: CELL, h: CELL },
+      { sx: 224, sy: 34, w: CELL, h: CELL },
+      { sx: 256, sy: 34, w: CELL, h: CELL },
     ]
   },
 
   // spike continua o mesmo (ajuste fino se precisar 122/124)
-  spike: { sx: 40, sy: 123, w: CELL, h: CELL }
+  spike: { sx: 32, sy: 64, w: CELL, h: CELL }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
