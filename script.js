@@ -45,7 +45,7 @@ const SPRITES = {
   },
 
   // spike continua o mesmo (ajuste fino se precisar 122/124)
-  spike: { sx: 32, sy: 93, w: CELL, h: CELL }
+  spike: { sx: 32, sy: 64, w: 32, h: 32 }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
