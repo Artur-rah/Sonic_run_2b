@@ -122,7 +122,7 @@ function gameOver(){
 }
 function resetToStart(){
   gameState = State.START; running=false; over=false; overTimer=0;
-  spikes.length=0; setHUDScore(0);
+  spikes.length = 1; setHUDScore(0);
 }
 
 function update(dt){
