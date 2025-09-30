@@ -14,33 +14,37 @@ const IMG = {
   sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
-const CELL = 32;
-const SCALE = 2.5;
+// --- tamanhos por sprite ---
+const CELL_RUN = 32;         // running: 32×32
+const CELL_ROLL = 32;        // rolling: 32×32
+const SPIKE_W   = 48;        // spike: largura real dos 3 dentes (ajuste se precisar)
+const SPIKE_H   = 32;        // altura do spike (ajuste se precisar)
 
+// --- SPRITES com offsets que você deu ---
 const SPRITES = {
-  rolling: { // ESTE deve ser o pulo
-    fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
+  running: {
+    fw: CELL_RUN, fh: CELL_RUN, frames: 3, fps: 14, scale: SCALE,
     seq: [
-      { sx:  32, sy: 34, w: CELL, h: CELL },
-      { sx:  66, sy: 34, w: CELL, h: CELL },
-      { sx: 100, sy: 34, w: CELL, h: CELL },
+      { sx:  32, sy: 34, w: CELL_RUN, h: CELL_RUN },
+      { sx:  66, sy: 34, w: CELL_RUN, h: CELL_RUN }, // gap ~2px
+      { sx: 100, sy: 34, w: CELL_RUN, h: CELL_RUN },
     ]
   },
-  running: { // ESTE deve ser a corrida
-    fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
+  rolling: {
+    fw: CELL_ROLL, fh: CELL_ROLL, frames: 8, fps: 16, scale: SCALE,
     seq: [
-      { sx:  30, sy: 77, w: CELL, h: CELL },
-      { sx:  66, sy: 77, w: CELL, h: CELL },
-      { sx: 102, sy: 77, w: CELL, h: CELL },
-      { sx: 138, sy: 77, w: CELL, h: CELL },
-      { sx: 174, sy: 77, w: CELL, h: CELL },
-      { sx: 210, sy: 77, w: CELL, h: CELL },
-      { sx: 246, sy: 77, w: CELL, h: CELL },
-      { sx: 282, sy: 77, w: CELL, h: CELL },
+      { sx:  30, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx:  66, sy: 77, w: CELL_ROLL, h: CELL_ROLL }, // gap 4px
+      { sx: 102, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx: 138, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx: 174, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx: 210, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx: 246, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
+      { sx: 282, sy: 77, w: CELL_ROLL, h: CELL_ROLL },
     ]
   },
-  
-  spike: { sx: 0, sy: 80, w: CELL, h: CELL }
+  // spike único com largura maior (3 dentes inteiros)
+  spike: { sx: 40, sy: 123, w: SPIKE_W, h: SPIKE_H }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
