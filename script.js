@@ -5,7 +5,7 @@ const GRAVITY = 1800;
 const JUMP_VY = -650;
 const SPEED = 360;
 const SPAWN_EVERY = 1.1;
- const GROUND_VISUAL_OFFSET = 30;
+ const GROUND_VISUAL_OFFSET = 40;
 
 const SPIKE_RELATIVE_FACTOR = 1.0;
 
