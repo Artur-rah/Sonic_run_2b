@@ -19,7 +19,7 @@ const SCALE = 2.5;
 
 const SPRITES = {
   running: {
-    fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
+    fw: CELL, fh: CELL, frames: 4, fps: 16, scale: SCALE,
     seq: [
       { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  64, sy: 0, w: CELL, h: CELL },
@@ -28,7 +28,7 @@ const SPRITES = {
     ]
   },
   rolling: {
-    fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
+    fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
       { sx:  32, sy: 34, w: CELL, h: CELL },
       { sx:  64, sy: 34, w: CELL, h: CELL },
