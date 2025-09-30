@@ -1,6 +1,6 @@
 const CANVAS_W = 960;
 const CANVAS_H = 360;
-const GROUND_Y = 300;
+const GROUND_Y = 330;
 const GRAVITY = 1800;
 const JUMP_VY = -650;
 const SPEED = 360;
