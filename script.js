@@ -201,7 +201,7 @@ function render(){
   }
 
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
+  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height );
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
