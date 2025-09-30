@@ -126,52 +126,115 @@ function resetToStart(){
 }
 
 function update(dt){
-  setHUDScore(Math.floor(score));
 
-  if (gameState === State.START) return;
+setHUDScore(Math.floor(score));
 
-  if (gameState === State.OVER){
-    overTimer += dt;
-    return;
-  }
 
-  if(running){
-    const worldSpeed = SPEED + Math.min(240, score*0.4);
 
-    parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
-    parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
+if (gameState === State.START) return;
 
-    player.animTime += dt;
-    player.vy += GRAVITY * dt;
-    player.y += player.vy * dt;
-    const foot = player.y + player.h;
-    if (foot >= GROUND_Y){
-      player.y = GROUND_Y - player.h;
-      player.vy = 0;
-      if (!player.onGround){
-        player.onGround = true;
-        player.state = "run";
-        player.animTime = 0;
-      }
-    }
 
-    spawnTimer += dt;
-    if (spawnTimer >= SPAWN_EVERY){
-      spawnTimer = 0;
-      const s= SPRITES.spike;
-      const ratio = (player.h / s.h) * SPIKE_RELATIVE_FACTOR;
-      const w = s.w * ratio, h = s.h * ratio;
-      spikes.push({ x: CANVAS_W + 24, y: GROUND_Y - h + 4, w, h});
-    }
 
-    for(let i=spikes.length-1;i>=0;i--){
-      const ob = spikes[i];
-      ob.x -= worldSpeed * dt;
-      if (ob.x + ob.w < -50) spikes.splice(i,1);
-      else if (hit(player, ob)) gameOver();
-    }
+if (gameState === State.OVER){
 
-    score += worldSpeed * dt * 0.05;
+overTimer += dt;
+
+return;
+
+}
+
+
+
+if(running){
+
+const worldSpeed = SPEED + Math.min(240, score*0.4);
+
+
+
+parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
+
+parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
+
+
+
+player.animTime += dt;
+
+player.vy += GRAVITY * dt;
+
+player.y += player.vy * dt;
+
+const foot = player.y + player.h;
+
+if (foot >= GROUND_Y){
+
+player.y = GROUND_Y - player.h;
+
+player.vy = 0;
+
+if (!player.onGround){
+
+player.onGround = true;
+
+player.state = "run";
+
+player.animTime = 0;
+
+}
+
+}
+
+
+spawnTimer += dt;
+
+if (spawnTimer >= SPAWN_EVERY) {
+
+spawnTimer = 0;
+
+
+
+const spikeHeightOnScreen = CELL * SCALE * 0.8;
+
+const s = SPRITES.spike;
+
+const spikeWidthOnScreen = s.w * (spikeHeightOnScreen / s.h);
+
+
+
+spikes.push({
+
+x: CANVAS_W + 24,
+
+y: GROUND_Y - spikeHeightOnScreen + 4,
+
+w: spikeWidthOnScreen,
+
+h: spikeHeightOnScreen
+
+});
+
+}
+
+// FIM DA PARTE CORRIGIDA
+
+
+
+// ESTA PARTE CONTINUA IGUAL A ANTES
+
+for(let i=spikes.length-1;i>=0;i--){
+
+const ob = spikes[i];
+
+ob.x -= worldSpeed * dt;
+
+if (ob.x + ob.w < -50) spikes.splice(i,1);
+
+else if (hit(player, ob)) gameOver();
+
+}
+
+
+
+score += worldSpeed * dt * 0.05;
   }
 }
 
