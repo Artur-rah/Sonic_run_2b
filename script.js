@@ -43,7 +43,7 @@ const SPRITES = {
     ]
   },
   // Lembre-se: se o espinho não aparecer, ajuste sx e sy para as coordenadas exatas da sua imagem
-  spike: { sx: 32, sy: 64, w: 32, h: 32 }
+  spike: { sx: 0, sy: 64, w: 32, h: 32 }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
