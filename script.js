@@ -155,6 +155,7 @@ function update(dt){
         player.animTime = 0;
       }
     }
+  }
   
 spawnTimer += dt;
 if (spawnTimer >= SPAWN_EVERY) {
@@ -291,4 +292,3 @@ function drawHint(msg, y){
   ctx.textAlign = "center"; ctx.textBaseline="middle";
   ctx.fillText(msg, CANVAS_W/2, y);
 }
-  
