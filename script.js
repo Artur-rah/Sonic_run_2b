@@ -39,10 +39,8 @@ const SPRITES = {
       { sx: 282, sy: 77, w: CELL, h: CELL },
     ]
   },
-  
   spike: { sx: 40, sy: 123, w: CELL, h: CELL }
 };
-
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
 const assets = {};
@@ -193,7 +191,7 @@ function render(){
   }
 
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2)
+  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + 2);
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
@@ -225,7 +223,10 @@ function tileImageXScaled(img, offsetX){
   let x = (offsetX % drawW);
   if (x > 0) x -= drawW;
   for (; x < CANVAS_W; x += drawW){
-    ctx.drawImage(img, 0, 0, img.width, img.height, Math.round(x), 0, Math.round(drawW), drawH);
+    ctx.drawImage(
+      img, 0, 0, img.width, img.height,
+      Math.round(x), 0, Math.round(drawW), drawH
+    );
   }
 }
 
