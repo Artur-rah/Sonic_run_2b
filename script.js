@@ -1,6 +1,6 @@
 const CANVAS_W = 960;
 const CANVAS_H = 360;
-const GROUND_Y = 330;
+const GROUND_Y = 300;
 const GRAVITY = 1800;
 const JUMP_VY = -650;
 const SPEED = 360;
@@ -200,8 +200,10 @@ function render(){
     return;
   }
 
+  const GROUND_VISUAL_OFFSET = 30;
+
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height );
+  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + GROUND_VISUAL_OFFSET);
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
