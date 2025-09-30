@@ -18,15 +18,8 @@ const CELL = 32;
 const SCALE = 2.5;
 
 const SPRITES = {
+  // agora RUN usa a faixa y=77 (a que você descreveu com 8 frames)
   running: {
-    fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
-    seq: [
-      { sx:  32, sy: 0, w: CELL, h: CELL },
-      { sx:  66, sy: 0, w: CELL, h: CELL },
-      { sx: 100, sy: 0, w: CELL, h: CELL },
-    ]
-  },
-  rolling: {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
       { sx:  30, sy: 77, w: CELL, h: CELL },
@@ -39,6 +32,18 @@ const SPRITES = {
       { sx: 282, sy: 77, w: CELL, h: CELL },
     ]
   },
+
+  // e ROLL usa a faixa y=34 (3 frames)
+  rolling: {
+    fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
+    seq: [
+      { sx:  32, sy: 34, w: CELL, h: CELL },
+      { sx:  66, sy: 34, w: CELL, h: CELL },
+      { sx: 100, sy: 34, w: CELL, h: CELL },
+    ]
+  },
+
+  // spike continua o mesmo (ajuste fino se precisar 122/124)
   spike: { sx: 40, sy: 123, w: CELL, h: CELL }
 };
 
