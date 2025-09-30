@@ -18,7 +18,6 @@ const CELL = 32;
 const SCALE = 2.5;
 
 const SPRITES = {
-  // agora RUN usa a faixa y=77 (a que você descreveu com 8 frames)
   running: {
     fw: CELL, fh: CELL, frames: 8, fps: 16, scale: SCALE,
     seq: [
@@ -28,8 +27,6 @@ const SPRITES = {
       { sx: 128, sy: 0, w: CELL, h: CELL}
     ]
   },
-
-  // e ROLL usa a faixa y=34 (3 frames)
   rolling: {
     fw: CELL, fh: CELL, frames: 3, fps: 14, scale: SCALE,
     seq: [
@@ -43,8 +40,7 @@ const SPRITES = {
       { sx: 256, sy: 34, w: CELL, h: CELL },
     ]
   },
-
-  // spike continua o mesmo (posição começa no y=64 mas não aparece)
+  // CORREÇÃO 1: Coordenadas corretas do espinho no spritesheet.
   spike: { sx: 32, sy: 64, w: 32, h: 32 }
 };
 
@@ -126,115 +122,60 @@ function resetToStart(){
 }
 
 function update(dt){
-
-setHUDScore(Math.floor(score));
-
-
-
-if (gameState === State.START) return;
-
-
-
-if (gameState === State.OVER){
-
-overTimer += dt;
-
-return;
-
-}
-
-
-
-if(running){
-
-const worldSpeed = SPEED + Math.min(240, score*0.4);
-
-
-
-parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
-
-parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
-
-
-
-player.animTime += dt;
-
-player.vy += GRAVITY * dt;
-
-player.y += player.vy * dt;
-
-const foot = player.y + player.h;
-
-if (foot >= GROUND_Y){
-
-player.y = GROUND_Y - player.h;
-
-player.vy = 0;
-
-if (!player.onGround){
-
-player.onGround = true;
-
-player.state = "run";
-
-player.animTime = 0;
-
-}
-
-}
-
-
-spawnTimer += dt;
-
-if (spawnTimer >= SPAWN_EVERY) {
-
-spawnTimer = 0;
-
-
-
-const spikeHeightOnScreen = CELL * SCALE * 0.8;
-
-const s = SPRITES.spike;
-
-const spikeWidthOnScreen = s.w * (spikeHeightOnScreen / s.h);
-
-
-
-spikes.push({
-
-x: CANVAS_W + 24,
-
-y: GROUND_Y - spikeHeightOnScreen + 4,
-
-w: spikeWidthOnScreen,
-
-h: spikeHeightOnScreen
-
-});
-
-}
-
-// FIM DA PARTE CORRIGIDA
-
-
-
-// ESTA PARTE CONTINUA IGUAL A ANTES
-
-for(let i=spikes.length-1;i>=0;i--){
-
-const ob = spikes[i];
-
-ob.x -= worldSpeed * dt;
-
-if (ob.x + ob.w < -50) spikes.splice(i,1);
-
-else if (hit(player, ob)) gameOver();
-
-}
-
-
-
-score += worldSpeed * dt * 0.05;
+  setHUDScore(Math.floor(score));
+
+  if (gameState === State.START) return;
+
+  if (gameState === State.OVER){
+    overTimer += dt;
+    return;
+  }
+
+  if(running){
+    const worldSpeed = SPEED + Math.min(240, score*0.4);
+
+    parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
+    parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
+
+    player.animTime += dt;
+    player.vy += GRAVITY * dt;
+    player.y += player.vy * dt;
+    const foot = player.y + player.h;
+    if (foot >= GROUND_Y){
+      player.y = GROUND_Y - player.h;
+      player.vy = 0;
+      if (!player.onGround){
+        player.onGround = true;
+        player.state = "run";
+        player.animTime = 0;
+      }
+    }
+
+    // CORREÇÃO 2: Lógica que cria o espinho com um tamanho fixo e correto.
+    spawnTimer += dt;
+    if (spawnTimer >= SPAWN_EVERY) {
+      spawnTimer = 0;
+
+      const spikeHeightOnScreen = CELL * SCALE * 0.8;
+      const s = SPRITES.spike;
+      const spikeWidthOnScreen = s.w * (spikeHeightOnScreen / s.h);
+
+      spikes.push({
+        x: CANVAS_W + 24,
+        y: GROUND_Y - spikeHeightOnScreen + 4,
+        w: spikeWidthOnScreen,
+        h: spikeHeightOnScreen
+      });
+    }
+
+    for(let i=spikes.length-1;i>=0;i--){
+      const ob = spikes[i];
+      ob.x -= worldSpeed * dt;
+      if (ob.x + ob.w < -50) spikes.splice(i,1);
+      else if (hit(player, ob)) gameOver();
+    }
+
+    score += worldSpeed * dt * 0.05;
   }
 }
 
