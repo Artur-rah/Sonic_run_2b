@@ -25,7 +25,7 @@ const SPRITES = {
       { sx:  0, sy: 0, w: CELL, h: CELL },
       { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  64, sy: 0, w: CELL, h: CELL },
-      { sx: 92, sy: 0, w: CELL, h: CELL }
+      { sx: 96, sy: 0, w: CELL, h: CELL }
     ]
   },
   rolling: {
