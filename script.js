@@ -41,7 +41,7 @@ const SPRITES = {
     ]
   },
   // CORREÇÃO 1: Coordenadas corretas do espinho no spritesheet.
-  spike: { sx: 32, sy: 0, w: 32, h: 32 }
+  spike: { sx: 32, sy: 64, w: 32, h: 32 }
 };
 
 function loadImage(src){ return new Promise(ok=>{ const i=new Image(); i.src=src; i.onload=()=>ok(i); }); }
