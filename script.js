@@ -1,3 +1,5 @@
+let backgroundMusic;
+
 const CANVAS_W = 960;
 const CANVAS_H = 360;
 const GROUND_Y = 300;
@@ -85,6 +87,10 @@ window.addEventListener("pointerdown", onPress);
   ctx = canvas.getContext("2d");
   canvas.width = CANVAS_W; canvas.height = CANVAS_H;
 
+   backgroundMusic = document.getElementById("background-music");
+
+  const [bg, ground, sheet] = await Promise.all([
+
   const [bg, ground, sheet] = await Promise.all([
     loadImage(IMG.bg), loadImage(IMG.ground), loadImage(IMG.sheet)
   ]);
@@ -106,6 +112,7 @@ function startGame(){
   gameState = State.PLAY;
   running = true; over = false; score = 0; overTimer = 0;
   spikes.length = 0; spawnTimer = 0;
+  backgroundMusic.play();
 
   player.w = SPRITES.running.fw * (SPRITES.running.scale||1);
   player.h = SPRITES.running.fh * (SPRITES.running.scale||1);
@@ -118,10 +125,14 @@ function startGame(){
 function gameOver(){
   if (gameState !== State.PLAY) return;
   running = false; over = true; gameState = State.OVER; overTimer = 0;
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
 }
 function resetToStart(){
   gameState = State.START; running=false; over=false; overTimer=0;
   spikes.length=0; setHUDScore(0);
+   backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
 }
 
 function update(dt){
