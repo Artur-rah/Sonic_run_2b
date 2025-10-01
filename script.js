@@ -248,7 +248,7 @@ function render(){
   if (x > 0) x -= groundDrawWidth;
   for (; x < CANVAS_W; x += groundDrawWidth) {
       ctx.drawImage(
-          ground,
+          sheet,
           Math.round(x),
           groundDrawY,
           Math.round(groundDrawWidth),
