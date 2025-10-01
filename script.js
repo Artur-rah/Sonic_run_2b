@@ -7,9 +7,10 @@ const GRAVITY = 1800;
 const JUMP_VY = -650;
 const SPEED = 360;
 const SPAWN_EVERY = 1.1;
- const GROUND_VISUAL_OFFSET = 40;
 
-const SPIKE_RELATIVE_FACTOR = 1.0;
+// Constantes para o visual do chão
+const GROUND_HEIGHT_SCALE = 1.5;
+const GROUND_VISUAL_OFFSET = 30; // Ajuste fino da posição Y do chão
 
 const IMG = {
   bg: "img/green hill.jpeg",
@@ -22,30 +23,29 @@ const SCALE = 2.5;
 
 const SPRITES = {
   running: {
-    fw: CELL, fh: CELL, frames: 4, // CORRIGIDO: Para bater com os 4 frames reais da imagem
+    fw: CELL, fh: CELL, frames: 4,
     fps: 16, scale: SCALE,
     seq: [
-      { sx:  0, sy: 0, w: CELL, h: CELL },
+      { sx:   0, sy: 0, w: CELL, h: CELL },
       { sx:  32, sy: 0, w: CELL, h: CELL },
       { sx:  64, sy: 0, w: CELL, h: CELL },
-      { sx: 96, sy: 0, w: CELL, h: CELL }
+      { sx:  96, sy: 0, w: CELL, h: CELL }
     ]
   },
   rolling: {
-    fw: CELL, fh: CELL, frames: 8, // CORRIGIDO: Para bater com os 8 frames reais da imagem
+    fw: CELL, fh: CELL, frames: 8,
     fps: 14, scale: SCALE,
     seq: [
-      { sx:  0, sy: 33, w: CELL, h: CELL },
-      { sx:  32, sy: 33, w: CELL, h: CELL },
-      { sx:  64, sy: 33, w: CELL, h: CELL },
-      { sx: 96, sy: 33, w: CELL, h: CELL },
-      { sx: 128, sy: 33, w: CELL, h: CELL },
-      { sx: 160, sy: 33, w: CELL, h: CELL },
-      { sx: 192, sy: 33, w: CELL, h: CELL },
-      { sx: 224, sy: 33, w: CELL, h: CELL },
+      { sx:   0, sy: 34, w: CELL, h: CELL },
+      { sx:  32, sy: 34, w: CELL, h: CELL },
+      { sx:  64, sy: 34, w: CELL, h: CELL },
+      { sx:  96, sy: 34, w: CELL, h: CELL },
+      { sx: 128, sy: 34, w: CELL, h: CELL },
+      { sx: 160, sy: 34, w: CELL, h: CELL },
+      { sx: 192, sy: 34, w: CELL, h: CELL },
+      { sx: 224, sy: 34, w: CELL, h: CELL },
     ]
   },
-  // Lembre-se: se o espinho não aparecer, ajuste sx e sy para as coordenadas exatas da sua imagem
   spike: { sx: 0, sy: 64, w: 32, h: 32 }
 };
 
@@ -87,10 +87,9 @@ window.addEventListener("pointerdown", onPress);
   ctx = canvas.getContext("2d");
   canvas.width = CANVAS_W; canvas.height = CANVAS_H;
 
-   backgroundMusic = document.getElementById("background-music");
+  backgroundMusic = document.getElementById("background-music");
 
-  const [bg, ground, sheet] = await Promise.all([
-
+  // CORRIGIDO: Removida a linha duplicada que causava o erro
   const [bg, ground, sheet] = await Promise.all([
     loadImage(IMG.bg), loadImage(IMG.ground), loadImage(IMG.sheet)
   ]);
@@ -112,7 +111,14 @@ function startGame(){
   gameState = State.PLAY;
   running = true; over = false; score = 0; overTimer = 0;
   spikes.length = 0; spawnTimer = 0;
-  backgroundMusic.play();
+
+  // Toca a música (versão segura)
+  const playPromise = backgroundMusic.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(error => {
+      console.log("Autoplay da música foi bloqueado pelo navegador.");
+    });
+  }
 
   player.w = SPRITES.running.fw * (SPRITES.running.scale||1);
   player.h = SPRITES.running.fh * (SPRITES.running.scale||1);
@@ -125,13 +131,17 @@ function startGame(){
 function gameOver(){
   if (gameState !== State.PLAY) return;
   running = false; over = true; gameState = State.OVER; overTimer = 0;
+  
+  // Para a música
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
 }
 function resetToStart(){
   gameState = State.START; running=false; over=false; overTimer=0;
   spikes.length=0; setHUDScore(0);
-   backgroundMusic.pause();
+
+  // Para a música
+  backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
 }
 
@@ -147,9 +157,10 @@ function update(dt){
 
   if(running){
     const worldSpeed = SPEED + Math.min(240, score*0.4);
+    const groundDrawWidth = assets.ground.width * GROUND_HEIGHT_SCALE;
 
     parallax.bgX = (parallax.bgX - worldSpeed*parallax.bgSpeedFactor*dt) % assets.bg.width;
-    parallax.groundX = (parallax.groundX - worldSpeed*dt) % assets.ground.width;
+    parallax.groundX = (parallax.groundX - worldSpeed*dt) % groundDrawWidth;
 
     player.animTime += dt;
     player.vy += GRAVITY * dt;
@@ -212,9 +223,24 @@ function render(){
     return;
   }
 
-
   tileImageXScaled(bg, parallax.bgX);
-  tileImageX(ground, parallax.groundX, 0, GROUND_Y - ground.height + GROUND_VISUAL_OFFSET);
+
+  // Lógica do chão corrigida e usando sua constante de ajuste
+  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
+  const groundDrawY = GROUND_Y + GROUND_VISUAL_OFFSET;
+  const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
+
+  let x = (parallax.groundX % groundDrawWidth);
+  if (x > 0) x -= groundDrawWidth;
+  for (; x < CANVAS_W; x += groundDrawWidth) {
+      ctx.drawImage(
+          ground,
+          Math.round(x),
+          groundDrawY,
+          Math.round(groundDrawWidth),
+          Math.round(groundDrawHeight)
+      );
+  }
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
