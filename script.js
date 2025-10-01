@@ -174,7 +174,7 @@ function update(dt){
     spawnTimer += dt;
     if (spawnTimer >= SPAWN_EVERY) {
       spawnTimer = 0;
-      const spikeHeightOnScreen = CELL * SCALE * 0.8;
+      const spikeHeightOnScreen = CELL * SCALE * 0.7;
       const s = SPRITES.spike;
       const spikeWidthOnScreen = s.w * (spikeHeightOnScreen / s.h);
 
