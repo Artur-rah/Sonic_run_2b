@@ -225,7 +225,10 @@ function render(){
 
   tileImageXScaled(bg, parallax.bgX);
 
-console.log("--- DEBUG DO CHÃO ---");
+  // ===================================================================
+  // BLOCO ÚNICO DE DIAGNÓSTICO E DESENHO DO CHÃO
+  // ===================================================================
+  console.log("--- DEBUG DO CHÃO ---");
   console.log("Objeto assets.ground:", assets.ground);
   console.log("Altura da imagem original:", assets.ground.height);
   console.log("Largura da imagem original:", assets.ground.width);
@@ -240,12 +243,7 @@ console.log("--- DEBUG DO CHÃO ---");
   console.log("Largura calculada para desenhar:", groundDrawWidth);
   console.log("Posição Y calculada para desenhar:", groundDrawY);
   console.log("--------------------");
-
-  // Lógica do chão corrigida e usando sua constante de ajuste
-  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
-  const groundDrawY = GROUND_Y + GROUND_VISUAL_OFFSET;
-  const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
-
+  
   let x = (parallax.groundX % groundDrawWidth);
   if (x > 0) x -= groundDrawWidth;
   for (; x < CANVAS_W; x += groundDrawWidth) {
@@ -257,6 +255,8 @@ console.log("--- DEBUG DO CHÃO ---");
           Math.round(groundDrawHeight)
       );
   }
+  // ===================================================================
+  
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
