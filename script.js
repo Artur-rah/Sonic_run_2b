@@ -8,13 +8,12 @@ const JUMP_VY = -650;
 const SPEED = 360;
 const SPAWN_EVERY = 1.1;
 
-// Constantes para o visual do chão
 const GROUND_HEIGHT_SCALE = 1.5;
-const GROUND_VISUAL_OFFSET = 30; // Ajuste fino da posição Y do chão
+const GROUND_VISUAL_OFFSET = 30;
 
 const IMG = {
   bg: "img/green hill.jpeg",
-  ground: "img/Ground-removebg-preview.png",
+  ground: "img/green hill ground.png", // Nome da imagem do chão correto
   sheet: "img/Custom _ Edited - Sonic the Hedgehog Customs - Sonic the Hedgehog - Sonic.png"
 };
 
@@ -89,7 +88,6 @@ window.addEventListener("pointerdown", onPress);
 
   backgroundMusic = document.getElementById("background-music");
 
-  // CORRIGIDO: Removida a linha duplicada que causava o erro
   const [bg, ground, sheet] = await Promise.all([
     loadImage(IMG.bg), loadImage(IMG.ground), loadImage(IMG.sheet)
   ]);
@@ -112,7 +110,6 @@ function startGame(){
   running = true; over = false; score = 0; overTimer = 0;
   spikes.length = 0; spawnTimer = 0;
 
-  // Toca a música (versão segura)
   const playPromise = backgroundMusic.play();
   if (playPromise !== undefined) {
     playPromise.catch(error => {
@@ -132,7 +129,6 @@ function gameOver(){
   if (gameState !== State.PLAY) return;
   running = false; over = true; gameState = State.OVER; overTimer = 0;
   
-  // Para a música
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
 }
@@ -140,7 +136,6 @@ function resetToStart(){
   gameState = State.START; running=false; over=false; overTimer=0;
   spikes.length=0; setHUDScore(0);
 
-  // Para a música
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
 }
@@ -225,38 +220,22 @@ function render(){
 
   tileImageXScaled(bg, parallax.bgX);
 
-  // ===================================================================
-  // BLOCO ÚNICO DE DIAGNÓSTICO E DESENHO DO CHÃO
-  // ===================================================================
-  console.log("--- DEBUG DO CHÃO ---");
-  console.log("Objeto assets.ground:", assets.ground);
-  console.log("Altura da imagem original:", assets.ground.height);
-  console.log("Largura da imagem original:", assets.ground.width);
-  console.log("Constante GROUND_HEIGHT_SCALE:", GROUND_HEIGHT_SCALE);
-  console.log("Constante GROUND_VISUAL_OFFSET:", GROUND_VISUAL_OFFSET);
-  
+  // Lógica final do chão, limpa e sem logs de debug
   const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
   const groundDrawY = GROUND_Y + GROUND_VISUAL_OFFSET;
   const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
-
-  console.log("Altura calculada para desenhar:", groundDrawHeight);
-  console.log("Largura calculada para desenhar:", groundDrawWidth);
-  console.log("Posição Y calculada para desenhar:", groundDrawY);
-  console.log("--------------------");
   
   let x = (parallax.groundX % groundDrawWidth);
   if (x > 0) x -= groundDrawWidth;
   for (; x < CANVAS_W; x += groundDrawWidth) {
       ctx.drawImage(
-          sheet,
+          ground, // CORRIGIDO: Desenhando a imagem correta do chão
           Math.round(x),
           groundDrawY,
           Math.round(groundDrawWidth),
           Math.round(groundDrawHeight)
       );
   }
-  // ===================================================================
-  
 
   if (player.state === "run"){
     drawAnimSeq(sheet, SPRITES.running, player.x, player.y, player.w, player.h, player.animTime);
