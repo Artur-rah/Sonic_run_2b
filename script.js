@@ -9,7 +9,7 @@ const SPEED = 360;
 const SPAWN_EVERY = 1.1;
 
 const GROUND_HEIGHT_SCALE = 1.5;
-const GROUND_VISUAL_OFFSET = 30;
+const GROUND_VISUAL_OFFSET = 10;
 
 const IMG = {
   bg: "img/green hill.jpeg",
