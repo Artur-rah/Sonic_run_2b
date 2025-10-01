@@ -225,6 +225,22 @@ function render(){
 
   tileImageXScaled(bg, parallax.bgX);
 
+console.log("--- DEBUG DO CHÃO ---");
+  console.log("Objeto assets.ground:", assets.ground);
+  console.log("Altura da imagem original:", assets.ground.height);
+  console.log("Largura da imagem original:", assets.ground.width);
+  console.log("Constante GROUND_HEIGHT_SCALE:", GROUND_HEIGHT_SCALE);
+  console.log("Constante GROUND_VISUAL_OFFSET:", GROUND_VISUAL_OFFSET);
+  
+  const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
+  const groundDrawY = GROUND_Y + GROUND_VISUAL_OFFSET;
+  const groundDrawWidth = assets.ground.width * (groundDrawHeight / assets.ground.height);
+
+  console.log("Altura calculada para desenhar:", groundDrawHeight);
+  console.log("Largura calculada para desenhar:", groundDrawWidth);
+  console.log("Posição Y calculada para desenhar:", groundDrawY);
+  console.log("--------------------");
+
   // Lógica do chão corrigida e usando sua constante de ajuste
   const groundDrawHeight = assets.ground.height * GROUND_HEIGHT_SCALE;
   const groundDrawY = GROUND_Y + GROUND_VISUAL_OFFSET;
